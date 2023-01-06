@@ -32,7 +32,7 @@ function Cardacceuil() {
 
     // 3. Create out useEffect function
     useEffect(() => {
-        fetch("https://rickandmortyapi.com/api/character/"+100+","+getRandomNumber()+","+getRandomNumber()+","+getRandomNumber()+","+getRandomNumber())
+        fetch("https://rickandmortyapi.com/api/character/"+getRandomNumber()+","+getRandomNumber()+","+getRandomNumber()+","+getRandomNumber()+","+getRandomNumber())
             .then(response => response.json())
             // 4. Setting *data* to the image url that we received from the response above
             .then(data => setData(data))
