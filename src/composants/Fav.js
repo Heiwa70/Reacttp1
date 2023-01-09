@@ -86,56 +86,65 @@ function Fav(){
 
 
     oldArray = CreateArray();
+    console.log("data = "+data)
+    if (data != null){
+        for (let i = 0; i < 4; i++) {
 
-    for (let i = 0; i < 4; i++) {
-        //console.log(data && data[i].id)
 
-        tab.push(<div
-            className=" cursor-pointer flex flex-col  items-center
+            tab.push(<div
+                className=" cursor-pointer flex flex-col  items-center
                w-60 bg-white border border-gray-200 p-3 rounded-lg
                 shadow-lg hover:scale-105 ease-in duration-300 relative
                 " style={{height:400}}>
-            <a href={data && "/personnage?id="+data[i].id}>
-                {data && <img className=" hauto rounded mt-2" src={data[i].image} alt="image du perso"/>}
-            </a>
-            <div className="p-5">
-                <a href="src/composants/App#">
-                    { data && <h5 className="mb-2 text-2xl font-bold tracking-tight text-black text-center">{data[i].name}</h5>}
+                <a href={data && "/personnage?id="+data[i].id}>
+                    {data && <img className=" hauto rounded mt-2" src={data[i].image} alt="image du perso"/>}
                 </a>
-                { data && <p style={{fontSize:10}} className=" text-black text-gray-400 truncate">{data[i].url}</p>}
+                <div className="p-5">
+                    <a href="src/composants/App#">
+                        { data && <h5 className="mb-2 text-2xl font-bold tracking-tight text-black text-center">{data[i].name}</h5>}
+                    </a>
+                    { data && <p style={{fontSize:10}} className=" text-black text-gray-400 truncate">{data[i].url}</p>}
 
-                <a id={"coeur"}
-                   className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white
+                    <a id={"coeur"}
+                       className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white
                      rounded-lg  cursor-pointer
                      focus:ring-4 focus:outline-none bg-gray-900
                       hover:bg-gray-600 ease-in duration-300 absolute bottom-0 mb-1 left-1/2" onClick={() =>{
 
-                    if (CheckIsFavorites(data[i].id)){
-                        console.log("delete")
-                        oldArray.remove(100)
+                        if (CheckIsFavorites(data[i].id)){
+                            console.log("delete")
+                            oldArray.remove(100)
 
-                    }
-                    else {
-                        console.log("add")
-                        oldArray.push(data[i].id)
-                        oldArray = oldArray.filter((item, index) => oldArray.indexOf(item) === index);
-                        Cookies.set('ArrayCookies',oldArray)
+                        }
+                        else {
+                            console.log("add")
+                            oldArray.push(data[i].id)
+                            oldArray = oldArray.filter((item, index) => oldArray.indexOf(item) === index);
+                            Cookies.set('ArrayCookies',oldArray)
 
-                    }
-
-
-                    //else
-                    //  Cookies.set('ArrayCookies',[...oldArray,...arrayCookies])
-
-                    console.log(Cookies.get('ArrayCookies'))
-
-                }  }
-                >{data && CheckIsFavorites(data[i].id) ? "❤️" : "🤍"}
+                        }
 
 
-                </a>
-            </div>
-        </div>)}
+                        //else
+                        //  Cookies.set('ArrayCookies',[...oldArray,...arrayCookies])
+
+                        console.log(Cookies.get('ArrayCookies'))
+
+                    }  }
+                    >{data && CheckIsFavorites(data[i].id) ? "❤️" : "🤍"}
+
+
+                    </a>
+                </div>
+            </div>)}
+
+    }
+    else {
+        tab.push(<div>Pas assez de favoris 4 min aller sur ce lien <a className={"font-bold"} href={"/"}>lien</a> pour ajouter des favoris</div>)
+    }
+
+
+
 
     return(
 

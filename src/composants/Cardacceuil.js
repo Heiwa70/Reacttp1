@@ -22,6 +22,10 @@ function Cardacceuil() {
     let verif = new Array();
     verif = Cookies.get("ArrayCookies")
 
+    if (verif == undefined){
+        Cookies.set("ArrayCookies",null)
+    }
+
 
 
     let [data, setData] = useState(null)
@@ -64,6 +68,7 @@ function Cardacceuil() {
         let chaine = verif.substring(1);
         // Diviser la chaîne de caractères en un tableau en utilisant la virgule comme délimiteur
         let array = chaine.split(",");
+
 
         return array;
     }
