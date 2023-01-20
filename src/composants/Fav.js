@@ -16,7 +16,7 @@ function Fav(){
     let verif = new Array();
     verif = Cookies.get("ArrayCookies")
     let fav = CreateArray();
-    let size = CreateArray.length;
+    let size = fav.length;
 
 
 
@@ -25,15 +25,15 @@ function Fav(){
     Array.prototype.remove = function(value) {
         this.splice(this.indexOf(value), 1);
     }
-
+    console.log("fav = "+fav)
     // 3. Create out useEffect function
     useEffect(() => {
-        fetch("https://rickandmortyapi.com/api/character/"+fav[0]+","+fav[1]+","+fav[2]+","+fav[3]+","+fav[4])
+        fetch("https://rickandmortyapi.com/api/character/"+fav[size-1]+","+fav[size-2]+","+fav[size-3]+","+fav[size-4]+","+fav[size-5])
             .then(response => response.json())
             // 4. Setting *data* to the image url that we received from the response above
             .then(data => setData(data))
 
-
+            console.log("data in fetch = "+data)
 
 
     },[])
@@ -86,9 +86,9 @@ function Fav(){
 
 
     oldArray = CreateArray();
-    console.log("data = "+data)
-    if (data != null){
-        for (let i = 0; i < 4; i++) {
+    console.log("data = "+verif)
+    if (data != null && verif != "null" && size >= 5){
+        for (let i = 0; i < 5; i++) {
 
 
             tab.push(<div
@@ -125,9 +125,6 @@ function Fav(){
                         }
 
 
-                        //else
-                        //  Cookies.set('ArrayCookies',[...oldArray,...arrayCookies])
-
                         console.log(Cookies.get('ArrayCookies'))
 
                     }  }
@@ -140,7 +137,7 @@ function Fav(){
 
     }
     else {
-        tab.push(<div>Pas assez de favoris 4 min aller sur ce lien <a className={"font-bold"} href={"/"}>lien</a> pour ajouter des favoris</div>)
+        tab.push(<div>Pas assez de favoris 5 mini pour aller sur cette page cliquer sur ce <a className={"font-bold"} href={"/"}>lien</a> pour ajouter des favoris</div>)
     }
 
 
