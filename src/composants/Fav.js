@@ -15,7 +15,7 @@ function Fav() {
     let oldArray = new Array();
     let verif = new Array();
     verif = Cookies.get("ArrayCookies")
-    let fav = CreateArray();
+    var fav = CreateArray();
     let size = fav.length;
 
 
@@ -37,6 +37,22 @@ function Fav() {
 
     }, [])
 
+    function Heart(){
+        // Écoute le clic sur tous les éléments avec l'ID "coeur"
+        document.querySelectorAll("#coeur").forEach(function (heartElement) {
+            heartElement.addEventListener("click", (call) => {
+                // console.log(heartElement.textContent)
+                // Vérifie si le contenu de l'élément est "🤍"
+                if (heartElement.textContent === "🤍") {
+                    // Si oui, remplace le contenu par "❤️"
+                    heartElement.textContent = "❤️";
+                } else {
+                    // Sinon, remplace le contenu par "🤍"
+                    heartElement.textContent = "🤍";
+                }
+            });
+        });
+    }
 
 // Écoute le clic sur tous les éléments avec l'ID "coeur"
     document.querySelectorAll("#coeur").forEach(function (heartElement) {
@@ -67,7 +83,7 @@ function Fav() {
 
         let array = CreateArray();
 
-        console.log(array); // affiche
+        console.log("array = "+array); // affiche
 
         for (let i = 0; i < array.length; i++) {
 
@@ -79,9 +95,13 @@ function Fav() {
     }
 
     function DeleteFavorite(id) {
-        let array = this.fav;
+        let array = CreateArray();
         array.shift();
 
+        const index = array.indexOf(id.toString());
+        array.splice(index, 1);
+        if (index != -1)
+            Cookies.set("ArrayCookies",array)
     }
 
 
@@ -110,25 +130,24 @@ function Fav() {
                        className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white
                      rounded-lg  cursor-pointer
                      focus:ring-4 focus:outline-none bg-gray-900
-                      hover:bg-gray-600 ease-in duration-300 absolute bottom-0 mb-1 left-1/2" onClick={() => {
+                      hover:bg-gray-600 ease-in duration-300 absolute bottom-0 mb-1 left-1/2"
+
+                       onClick={() => {
 
                         if (CheckIsFavorites(data[i].id)) {
+                            Heart()
                             console.log("delete")
-                            oldArray.remove(100)
-
+                            DeleteFavorite(data[i].id)
                         } else {
+                            Heart()
                             console.log("add")
                             oldArray.push(data[i].id)
                             oldArray = oldArray.filter((item, index) => oldArray.indexOf(item) === index);
                             Cookies.set('ArrayCookies', oldArray)
-
                         }
 
-
-                        console.log(Cookies.get('ArrayCookies'))
-
                     }}
-                    >{data && CheckIsFavorites(data[i].id) ? "❤️" : "🤍"}
+                    >❤️
 
 
                     </a>

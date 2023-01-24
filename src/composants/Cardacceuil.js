@@ -47,6 +47,16 @@ function Cardacceuil() {
     },[])
 
 
+    function DeleteFavorite(id) {
+        let array = CreateArray();
+        array.shift();
+
+        const index = array.indexOf(id.toString());
+        array.splice(index, 1);
+        if (index != -1)
+            Cookies.set("ArrayCookies",array)
+    }
+
 
 // Écoute le clic sur tous les éléments avec l'ID "coeur"
     document.querySelectorAll("#coeur").forEach(function(heartElement) {
@@ -80,14 +90,12 @@ function Cardacceuil() {
 
         console.log(array); // affiche
 
-         for (let i = 0; i < array.length ;i++) {
-
-             if (id == array[i]){
-                 console.log(true)
-                 return true
-             }
-
-         }
+        let index = array.indexOf(id.toString())
+        console.log("index = "+ index)
+        if (index != -1)
+            return true
+        else
+            return false
     }
 
 
@@ -123,6 +131,7 @@ function Cardacceuil() {
                     if (CheckIsFavorites(data[i].id)){
                         console.log("delete")
                         oldArray.remove(100)
+                        DeleteFavorite(data[i].id)
 
                     }
                     else {
