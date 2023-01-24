@@ -8,10 +8,11 @@ const config = createSlice({
 
     ],
     reducers: {
-        vueUsers: (state, action) => {
+        changeUsers: (state, action) => {
 
-            const newUser = {name: action.playload}
-            state[0] = newUser
+            const newUser = {name: action.payload}
+            console.log("playload = "+action.payload)
+            state.splice(0,1,newUser)
         }
     }
 })
