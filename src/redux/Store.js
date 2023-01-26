@@ -8,11 +8,13 @@ const config = createSlice({
 
     ],
     reducers: {
-        changeUsers: (state, action) => {
+        SetUsers: (state, action) => {
 
             const newUser = {name: action.payload}
-            console.log("playload = "+action.payload)
             state.splice(0,1,newUser)
+        },
+        GetUser:(state,action)=>{
+            return state
         }
     }
 })
