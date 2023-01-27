@@ -3,18 +3,21 @@ import {configureStore, createSlice} from '@reduxjs/toolkit'
 const config = createSlice({
     name: "login",
     initialState: [
-        {nom: ""}
+        {nom: null}
 
 
     ],
     reducers: {
         SetUsers: (state, action) => {
 
-            const newUser = {name: action.payload}
-            state.splice(0,1,newUser)
+            const newUser = {nom: action.payload}
+            console.log(state[0])
+            state[0] = newUser
+            console.log(state[0])
+
         },
         GetUser:(state,action)=>{
-            return state
+            return "coucouc"
         }
     }
 })

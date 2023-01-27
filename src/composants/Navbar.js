@@ -1,23 +1,30 @@
 import logo from '../assets/rick.png';
 import user from '../assets/user.png';
 import './App.css';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {Link} from "react-router-dom";
 
 
 function Navbar() {
-    const dispatch = useDispatch()
+    const name = useSelector((state) => state.login)
+    console.log("-------------NAV-------------")
+    console.log(name[0].nom)
+    console.log("--------------------------")
 
     return (
 
 
                 <nav className="bg-white border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-900">
                     <div className="container flex flex-wrap items-center justify-between mx-auto">
-                        <a href="/" className="flex items-center">
-                            <img src={logo} className="h-6 mr-3 sm:h-9"
-                                 alt="Logo du site"/>
-                            <span
-                                className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Rick et Morty</span>
-                        </a>
+                        <Link to='/'>
+                            <p className="flex items-center">
+                                <img src={logo} className="h-6 mr-3 sm:h-9"
+                                     alt="Logo du site"/>
+                                <span
+                                    className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Rick et Morty</span>
+                            </p>
+                        </Link>
+
                         <button data-collapse-toggle="navbar-default" type="button"
                                 className="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                                 aria-controls="navbar-default" aria-expanded="false">
@@ -32,15 +39,15 @@ function Navbar() {
                         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
                             <ul className="flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                                 <li>
-                                    <a href="/compte"> <img src={user}/></a>
+                                    <Link to={"/compte"}> <img src={user} className={"h-8 w-auto"}/> <p className={"text-white"}>{name[0].nom != null ? name[0].nom : "Inconnue"}</p></Link>
                                 </li>
                                 <li>
-                                    <a href="/episode"
-                                       className="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Épisode</a>
+                                    <Link to={"/episode"}
+                                       className="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Épisode</Link>
                                 </li>
                                 <li>
-                                    <a href="/favoris"
-                                       className="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Favoris</a>
+                                    <Link to={"/favoris"}
+                                       className="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Favoris</Link>
                                 </li>
                             </ul>
 

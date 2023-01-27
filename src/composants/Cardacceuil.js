@@ -2,6 +2,7 @@
 import './App.css';
 import {useEffect, useState} from "react";
 import Cookies from 'js-cookie';
+import {useSelector} from "react-redux";
 
 
 
@@ -26,7 +27,10 @@ function Cardacceuil() {
         Cookies.set("ArrayCookies",null)
     }
 
-
+    const name = useSelector((state) => state.login)
+    console.log("-------------CARD -------------")
+    console.log(name[0].nom)
+    console.log("--------------------------")
 
     let [data, setData] = useState(null)
 
@@ -88,10 +92,10 @@ function Cardacceuil() {
 
         let array = CreateArray();
 
-        console.log(array); // affiche
+//        console.log(array); // affiche
 
         let index = array.indexOf(id.toString())
-        console.log("index = "+ index)
+  //      console.log("index = "+ index)
         if (index != -1)
             return true
         else

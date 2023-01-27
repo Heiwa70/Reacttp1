@@ -9,8 +9,8 @@ function Compte() {
         type: "login/SetUsers",
         payload: "clement"
     })
-    const name = useSelector((state) => state.login[0].name)
-    console.log("nom de l'user = " + name)
+   // const name = useSelector((state) => state.login)
+    //console.log(name[0].nom)
 }
 
 
