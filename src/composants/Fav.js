@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import Cookies from "js-cookie";
+import {Link} from "react-router-dom";
 
 function getRandomNumber() {
     return Math.floor(Math.random() * 826) + 1;
@@ -116,9 +117,9 @@ function Fav() {
                w-60 bg-white border border-gray-200 p-3 rounded-lg
                 shadow-lg hover:scale-105 ease-in duration-300 relative
                 " style={{height: 400}}>
-                <a href={data && "/personnage?id=" + data[i].id}>
+                <Link to={data && "/personnage?id=" + data[i].id}>
                     {data && <img className=" hauto rounded mt-2" src={data[i].image} alt="image du perso"/>}
-                </a>
+                </Link>
                 <div className="p-5">
                     <a href="src/composants/App#">
                         {data &&
