@@ -12,6 +12,7 @@ import Personnage from "./composants/Personnage";
 import Fav from "./composants/Fav";
 import Episode from "./composants/Episode";
 import Compte from "./composants/Compte";
+import Inscription from "./composants/Inscription";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -26,6 +27,7 @@ root.render(
                 <Route exact path="/personnage" element={<div><Navbar/> <Personnage/></div>}/>
                 <Route exact path="/favoris" element={<div><Navbar/><Fav/></div>}/>
                 <Route exact path="/compte" element={<div><Navbar/><Compte/></div>}/>
+                <Route exact path="/inscription" element={<div><Navbar/><Inscription/></div>}/>
 
             </Routes>
         </Router>

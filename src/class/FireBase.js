@@ -1,7 +1,7 @@
 import {initializeApp} from "firebase/app";
 import {doc, getDoc, getFirestore, updateDoc} from "firebase/firestore";
 import {Component, useEffect, useState} from "react";
-import {getAuth, signInWithEmailAndPassword} from "firebase/auth"
+import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth"
 
 
 class FireBase extends Component {
@@ -79,6 +79,27 @@ class FireBase extends Component {
         });
     }
 
+    InscriptionFireBase(nom, email, password) {
+        return new Promise((resolve, reject) => {
+            if (nom != null && email != null && password != null) {
+                createUserWithEmailAndPassword(this.auth, email, password)
+                    .then((userCredential) => {
+                        // Signed in
+                        const user = userCredential.user;
+                        console.log("user créer" + user)
+                        resolve(true);
+
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        alert("error code = " + errorCode + "|" +
+                            "error message = "+errorMessage)
+                        reject(false)
+                    })
+            }
+        })
+    }
 
 
 }
