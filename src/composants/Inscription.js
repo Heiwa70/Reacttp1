@@ -5,43 +5,41 @@ function Inscription() {
     const bdd = new FireBase();
 
     function handleClick() {
-        //----------------TaileMDP------------------------
-        const inputPassWord = document.getElementById("password")
-        const password = inputPassWord.value
-        if (password.length <= 8) {
-            alert("Mot de passe trop court minimun 8 caractères")
-        } else{
-            //----------------FireBase------------------------
-            const inputNom = document.getElementById("nom")
-            const inputEmail = document.getElementById("email")
-
-            const nom = inputNom.value
-            const email = inputEmail.value
-
-            console.log(email)
-            console.log(password)
-
-            bdd.InscriptionFireBase(nom, email, password)
-                .then((isConnected) => {
-                    console.log(isConnected)
-                    if (isConnected == true) {
-                        alert("Tu es est inscrit" + nom + " avec l'email : " + email + "✅")
-                        //const divFenetreUser = document.getElementById("blockSIG")
-                        //divFenetreUser.style.display = "none"
-                        document.location ="/gestion"
-                    } else {
-                        alert("Email ou mot de passe incorrect ❌")
-                    }
-                })
-                .catch((error) => {
 
 
-                })
+        const inputNom = document.getElementById("nom");
+        const inputEmail = document.getElementById("email");
 
+        const nom = inputNom.value;
+        const email = inputEmail.value;
 
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (!emailRegex.test(email)) {
+            alert("Email non valide");
+            return;
         }
 
+        const inputPassWord = document.getElementById("password");
+        const password = inputPassWord.value;
+        if (password.length < 8) {
+            alert("Mot de passe trop court, minimun 8 caractères");
+            return;
+        }
+
+        bdd.InscriptionFireBase(nom, email, password)
+            .then((isConnected) => {
+                if (isConnected) {
+                    alert(`Tu es inscrit ${nom} avec l'email : ${email} ✅`);
+                    document.location = "/gestion";
+                } else {
+                    alert("Email ou mot de passe incorrect ❌");
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
+
 
     function handlePassword() {
 
@@ -67,7 +65,7 @@ function Inscription() {
                                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg
                                    focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600
                                    dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                       placeholder="Jacky" required=""/>
+                                       placeholder="Jacky" required/>
                             </div>
                             <div>
                                 <label htmlFor="email"

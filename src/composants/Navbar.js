@@ -23,6 +23,10 @@ function Navbar() {
                     type: "login/SetUsers",
                     payload: data
                 });
+                document.getElementById("gestion")
+                    .addEventListener("click",()=>{
+                        window.location.href = "/gestion"
+                    })
             }
             else {
                 console.log("nav bar pas de connexion")
@@ -30,6 +34,10 @@ function Navbar() {
                     type: "login/SetUsers",
                     payload: "Inconnue"
                 });
+                document.getElementById("gestion")
+                    .addEventListener("click",()=>{
+                        window.location.href = "/compte"
+                    })
             }
         });
     }, []);
@@ -72,8 +80,8 @@ function Navbar() {
                 <div className="hidden w-full md:block md:w-auto" id="navbar-default">
                     <ul className="flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                         <li>
-                            <Link to={"/compte"}> <img src={user} className={"h-8 w-auto"}/> <p
-                                className={"text-white"}>{name[0].nom != null ? name[0].nom : "Inconnue"}</p></Link>
+                            <a id="gestion" className="cursor-pointer flex flex-row items-center"> <img src={user} className={"h-8 w-auto mr-[10px]"}/> <p
+                                className={"text-white"}>{name[0].nom != null ? name[0].nom : "Inconnue"}</p></a>
                         </li>
                         <li>
                             <Link to={"/episode"}

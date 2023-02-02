@@ -89,6 +89,9 @@ class FireBase extends Component {
     }
 
     InscriptionFireBase(nom, email, password) {
+        if (!nom)
+            nom = "Non renseigné"
+
         return new Promise((resolve, reject) => {
             if (nom != null && email != null && password != null) {
                 createUserWithEmailAndPassword(this.auth, email, password)

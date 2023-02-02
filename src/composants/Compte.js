@@ -36,6 +36,12 @@ function Compte() {
         const password = inputPassWord.value
         console.log(email)
         console.log(password)
+
+        const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+        if (!emailRegex.test(email)) {
+            alert('Adresse email non valide REGEX');
+            return;
+        }
         bdd.ConnexionFireBase(email, password)
             .then((isConnected) => {
                 console.log(isConnected)
@@ -58,6 +64,8 @@ function Compte() {
 
 
     }
+
+
 
     return (<section>
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto">

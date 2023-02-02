@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import Cookies from "js-cookie";
 import {Link} from "react-router-dom";
+import FireBase from "../class/FireBase";
 
 function getRandomNumber() {
     return Math.floor(Math.random() * 826) + 1;
@@ -9,6 +10,21 @@ function getRandomNumber() {
 
 function Fav() {
 
+    const bdd = new FireBase()
+
+    const [load, setLoad] = useState(false);
+
+    useEffect(() => {
+        const connect = bdd.IsConnected()
+        connect.then((users) =>{
+            console.log("connect = "+ users)
+            if (users == false)
+                setLoad(false)
+            else
+                setLoad(users)
+        })
+
+    }, [])
 
     const [isClicked, setIsClicked] = useState(false);
     var tab = new Array();
@@ -38,7 +54,7 @@ function Fav() {
 
     }, [])
 
-    function Heart(){
+    function Heart() {
         // Écoute le clic sur tous les éléments avec l'ID "coeur"
         document.querySelectorAll("#coeur").forEach(function (heartElement) {
             heartElement.addEventListener("click", (call) => {
@@ -84,7 +100,7 @@ function Fav() {
 
         let array = CreateArray();
 
-     //   console.log("array = "+array); // affiche
+        //   console.log("array = "+array); // affiche
 
         for (let i = 0; i < array.length; i++) {
 
@@ -102,7 +118,7 @@ function Fav() {
         const index = array.indexOf(id.toString());
         array.splice(index, 1);
         if (index != -1)
-            Cookies.set("ArrayCookies",array)
+            Cookies.set("ArrayCookies", array)
     }
 
 
@@ -135,19 +151,19 @@ function Fav() {
 
                        onClick={() => {
 
-                        if (CheckIsFavorites(data[i].id)) {
-                            Heart()
-                            console.log("delete")
-                            DeleteFavorite(data[i].id)
-                        } else {
-                            Heart()
-                            console.log("add")
-                            oldArray.push(data[i].id)
-                            oldArray = oldArray.filter((item, index) => oldArray.indexOf(item) === index);
-                            Cookies.set('ArrayCookies', oldArray)
-                        }
+                           if (CheckIsFavorites(data[i].id)) {
+                               Heart()
+                               console.log("delete")
+                               DeleteFavorite(data[i].id)
+                           } else {
+                               Heart()
+                               console.log("add")
+                               oldArray.push(data[i].id)
+                               oldArray = oldArray.filter((item, index) => oldArray.indexOf(item) === index);
+                               Cookies.set('ArrayCookies', oldArray)
+                           }
 
-                    }}
+                       }}
                     >❤️
 
 
@@ -163,7 +179,11 @@ function Fav() {
     }
 
 
-    return (
+    return load == false ? (
+        <div>Connectez-vous sur ce <Link to={"/compte"} className={"font-bold"}>lien </Link>
+            pour avoir assez
+        à vos favoris</div>
+    ) : (
 
         <div
             className={" w-full grid grid-cols-4 gap-4 mt-4 justify-items-center max-lg:grid-cols-3 max-sm:grid-cols-1"}>
