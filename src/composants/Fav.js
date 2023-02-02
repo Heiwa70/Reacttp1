@@ -80,16 +80,16 @@ function Fav() {
     }
 
     function CheckIsFavorites(id) {
-        console.log("id = " + id)
+        //console.log("id = " + id)
 
         let array = CreateArray();
 
-        console.log("array = "+array); // affiche
+     //   console.log("array = "+array); // affiche
 
         for (let i = 0; i < array.length; i++) {
 
             if (id == array[i]) {
-                console.log(true)
+                //console.log(true)
                 return true
             }
         }
@@ -107,7 +107,7 @@ function Fav() {
 
 
     oldArray = CreateArray();
-    console.log("data = " + verif)
+    //console.log("data = " + verif)
     if (data != null && verif != "null" && size >= 5) {
         for (let i = 0; i < 5; i++) {
 

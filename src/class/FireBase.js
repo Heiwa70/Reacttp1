@@ -1,7 +1,10 @@
 import {initializeApp} from "firebase/app";
-import {doc, getDoc, getFirestore, updateDoc} from "firebase/firestore";
+import {doc, getDoc, getFirestore, updateDoc, setDoc} from "firebase/firestore";
 import {Component, useEffect, useState} from "react";
-import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth"
+import {
+    getAuth, signInWithEmailAndPassword,
+    createUserWithEmailAndPassword, onAuthStateChanged, signOut
+} from "firebase/auth"
 
 
 class FireBase extends Component {
@@ -20,7 +23,7 @@ class FireBase extends Component {
         this.firebaseApp = initializeApp(this.firebaseConfig);
         this.db = getFirestore(this.firebaseApp);
         this.auth = getAuth(this.firebaseApp)
-
+        this.chemin = "Usersinfo"
     }
 
 
@@ -28,15 +31,21 @@ class FireBase extends Component {
         fire: null,
     };
 
+    async CreateDocNewUser(email, nom) {
+        await setDoc(doc(this.db, this.chemin, email), {
+            favoris: [],
+            nom: nom
+        })
+    }
 
-    async readData() {
+    async readData(document) {
         try {
-            const usersInfoRef = doc(this.db, 'Usersinfo', 'user');
+            const usersInfoRef = doc(this.db, 'Usersinfo', document)
 
             const userInfo = await getDoc(usersInfoRef);
             if (userInfo.exists) {
-                console.log(userInfo.data())
-                const nameUser = userInfo.data().nom;
+                //console.log(userInfo.data())
+                const nameUser = userInfo.data().favoris;
                 //console.log('nameuser = ');
                 //  console.log(nameUser);
 
@@ -53,7 +62,7 @@ class FireBase extends Component {
     }
 
     async UpdateFavoris() {
-        const favRef = doc(this.db, "Usersinfo", "user")
+        const favRef = doc(this.db, "Usersinfo", "clement70200@gmail.com")
         await updateDoc(favRef, {
             favoris: [112, 15, 1]
         })
@@ -87,6 +96,7 @@ class FireBase extends Component {
                         // Signed in
                         const user = userCredential.user;
                         console.log("user créer" + user)
+                        this.CreateDocNewUser(email, nom)
                         resolve(true);
 
                     })
@@ -94,13 +104,31 @@ class FireBase extends Component {
                         const errorCode = error.code;
                         const errorMessage = error.message;
                         alert("error code = " + errorCode + "|" +
-                            "error message = "+errorMessage)
+                            "error message = " + errorMessage)
                         reject(false)
                     })
             }
         })
     }
 
+    async IsConnected() {
+        return new Promise((resolve) => {
+            onAuthStateChanged(this.auth, (user) => {
+                if (user) {
+                    const email = user.email
+                    console.log("variable email dans isconnected" + email)
+                    resolve(email);
+                } else {
+                    console.log("pas duser connecter")
+                    resolve(false);
+                }
+            });
+        });
+    }
+
+    LogOut() {
+        signOut(this.auth)
+    }
 
 }
 

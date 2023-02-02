@@ -3,10 +3,15 @@ import {useEffect, useState} from "react";
 import Cookies from "js-cookie";
 import './App.css';
 import {Link} from "react-router-dom";
+import FireBase from "../class/FireBase";
 
 
 function Episode() {
     console.log(GetUrl())
+
+
+    const bdd = new FireBase()
+    bdd.IsConnected();
 
 
     const [isClicked, setIsClicked] = useState(false);
@@ -33,8 +38,7 @@ function Episode() {
 
     }, [])
 
-    if (data)
-        console.log("data = " + data.results)
+    if (data) console.log("data = " + data.results)
 
     if (data) {
         let taille = data.results.length
@@ -42,11 +46,9 @@ function Episode() {
             //console.log(data && data[4].id)
 
             tab.push(
-                <p>{data && data.results[i].name + " | " + data.results[i].episode + " | " + data.results[i].air_date}</p>
-            )
+                <p>{data && data.results[i].name + " | " + data.results[i].episode + " | " + data.results[i].air_date}</p>)
         }
     }
-
 
 
     return (
@@ -79,7 +81,7 @@ function Episode() {
             {tab.map((data, index) => (
 
                 <div key={index}>
-                    <div className={"flex justify-center align-middle  w-1/1"}>{console.log("index = "+index)}
+                    <div className={"flex justify-center align-middle  w-1/1"}>{console.log("index = " + index)}
                         <Link to={"/SingleEpisode?id=2"} className={"w-1/2"}>
                             <div
                                 className={"w-1/1 border-b-2 text-center my-2 py-4 cursor-pointer bg-blue-400 rounded-2xl hover:bg-blue-500 transition ease-in delay-200"}>
@@ -89,10 +91,8 @@ function Episode() {
                         </Link>
 
                     </div>
-                </div>
-            ))}
-        </div>
-    );
+                </div>))}
+        </div>);
 
 
 }

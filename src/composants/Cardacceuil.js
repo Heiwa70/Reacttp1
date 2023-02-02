@@ -29,9 +29,9 @@ function Cardacceuil() {
     }
 
     const name = useSelector((state) => state.login)
-    console.log("-------------CARD -------------")
-    console.log(name[0].nom)
-    console.log("--------------------------")
+   // console.log("-------------CARD -------------")
+    //console.log(name[0].nom)
+    //console.log("--------------------------")
 
     let [data, setData] = useState(null)
 
@@ -89,7 +89,7 @@ function Cardacceuil() {
     }
 
     function CheckIsFavorites(id){
-        console.log("id = "+id)
+       // console.log("id = "+id)
 
         let array = CreateArray();
 

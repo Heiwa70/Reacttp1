@@ -11,7 +11,7 @@ const config = createSlice({
         SetUsers: (state, action) => {
 
             const newUser = {nom: action.payload}
-            console.log(state[0])
+            console.log(state)
             state[0] = newUser
             console.log(state[0])
 

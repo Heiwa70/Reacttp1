@@ -7,15 +7,13 @@ function Compte() {
 //const vueData = useSelector((state)=>console.log("Useselec = "+state.login[0].name))
     const dispatch = useDispatch()
     const bdd = new FireBase();
-    dispatch({
-        type: "login/SetUsers", payload: "clement"
-    })
 
 
-    //const users = bdd.readData()
 
+        //const users = bdd.readData("clement70200@gmail.com")
 
-    /*
+/*
+
     console.log(users)
     users.then(res => {
         console.log("---------readDATA---------------")
@@ -29,7 +27,7 @@ function Compte() {
 
     })
 
-    */
+*/
 
     function handleClick() {
         const inputEmail = document.getElementById("email")
@@ -43,8 +41,12 @@ function Compte() {
                 console.log(isConnected)
                 if (isConnected == true) {
                     alert("Tu es est connecter avec l'email : " + email + "🤗")
-                    const divFenetreUser = document.getElementById("blockSIG")
-                    divFenetreUser.style.display = "none"
+
+                    dispatch({
+                        type: "login/SetUsers", payload: email
+                    })
+                    document.location ="/gestion"
+
                 } else {
                     alert("Email ou mot de passe incorrect ❌")
                 }

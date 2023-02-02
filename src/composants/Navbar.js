@@ -3,9 +3,42 @@ import user from '../assets/user.png';
 import './App.css';
 import {useDispatch, useSelector} from "react-redux";
 import {Link} from "react-router-dom";
+import FireBase from "../class/FireBase";
+import {useEffect, useState} from "react";
 
 
 function Navbar() {
+    const bdd = new FireBase()
+    const connect = bdd.IsConnected()
+
+
+    const dispatch = useDispatch();
+    const [isConnected, setIsConnected] = useState(false);
+
+    useEffect(() => {
+        connect.then((data) => {
+            setIsConnected(data);
+            if (data != false) {
+                dispatch({
+                    type: "login/SetUsers",
+                    payload: data
+                });
+            }
+            else {
+                console.log("nav bar pas de connexion")
+                dispatch({
+                    type: "login/SetUsers",
+                    payload: "Inconnue"
+                });
+            }
+        });
+    }, []);
+
+
+    /*if (connect != false)
+        dispatch({
+            type: "login/SetUsers", payload: "connect"
+        })*/
     const name = useSelector((state) => state.login)
     //console.log("-------------NAV-------------")
     //console.log(name[0].nom)
