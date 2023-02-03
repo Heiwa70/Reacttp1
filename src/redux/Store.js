@@ -11,9 +11,9 @@ const config = createSlice({
         SetUsers: (state, action) => {
 
             const newUser = {nom: action.payload}
-            console.log(state)
+          //  console.log("no array "+state)
             state[0] = newUser
-            console.log(state[0])
+            //console.log("array[O] "+state[0])
 
         },
         GetUser:(state,action)=>{

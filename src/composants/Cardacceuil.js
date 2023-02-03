@@ -14,42 +14,32 @@ function getRandomNumber() {
 function Cardacceuil() {
 
     const bdd = new FireBase()
-    const [load, setLoad] = useState(false);
+    const [load, setLoad] = useState(null);
 
     useEffect(() => {
         const connect = bdd.IsConnected()
         connect.then((users) => {
             console.log("connect = " + users)
-            if (users == false)
-                setLoad(false)
-            else
-                setLoad(users)
+            if (users == false) setLoad(false)
+            else setLoad(users)
         })
 
     }, [])
 
 
     const [isClicked, setIsClicked] = useState(false);
-    var tab = new Array();
-    let arrayCookies = new Array();
-    let oldArray = new Array();
-    let verif = new Array();
-    verif = Cookies.get("ArrayCookies")
 
-    if (verif == undefined) {
-        Cookies.set("ArrayCookies", null)
+
+    const dataRedux = useSelector((state) => state.login)
+    if (dataRedux[0].nom != null) {
+        const userName = dataRedux[0].nom
     }
 
-    const name = useSelector((state) => state.login)
-    // console.log("-------------CARD -------------")
-    //console.log(name[0].nom)
-    //console.log("--------------------------")
+    const tab = [];
+
 
     let [data, setData] = useState(null)
 
-    Array.prototype.remove = function (value) {
-        this.splice(this.indexOf(value), 1);
-    }
 
     // 3. Create out useEffect function
     useEffect(() => {
@@ -61,60 +51,71 @@ function Cardacceuil() {
 
     }, [])
 
+    function AddFavoris(id, nameDoc) {
+        const response = bdd.readData(nameDoc)
+        response.then((data) => {
+            const newArrayFavoris = data
+            newArrayFavoris.push(id)
 
-    function DeleteFavorite(id) {
-        let array = CreateArray();
-        array.shift();
+            bdd.UpdateFavoris(newArrayFavoris, nameDoc)
+        })
+    }
 
-        const index = array.indexOf(id.toString());
-        array.splice(index, 1);
-        if (index != -1)
-            Cookies.set("ArrayCookies", array)
+    function DeleteFavorite(id, nameDoc) {
+        const response = bdd.readData(nameDoc)
+        response.then((data) => {
+            const newArrayFavoris = data
+            const index = newArrayFavoris.indexOf(id)
+            const arrayWithDelete = newArrayFavoris.splice(index, 1)
+            console.log(arrayWithDelete)
+        })
     }
 
 
-// Écoute le clic sur tous les éléments avec l'ID "coeur"
-    document.querySelectorAll("#coeur").forEach(function (heartElement) {
-        heartElement.addEventListener("click", (call) => {
-            // console.log(heartElement.textContent)
-            // Vérifie si le contenu de l'élément est "🤍"
-            if (heartElement.textContent === "🤍") {
-                // Si oui, remplace le contenu par "❤️"
-                heartElement.textContent = "❤️";
-            } else {
-                // Sinon, remplace le contenu par "🤍"
-                heartElement.textContent = "🤍";
-            }
-        });
-    });
+
 
     function CreateArray() {
-        // Supprimer le premier caractère (une virgule)
-        let chaine = verif.substring(1);
-        // Diviser la chaîne de caractères en un tableau en utilisant la virgule comme délimiteur
-        let array = chaine.split(",");
 
-
-        return array;
     }
 
-    function CheckIsFavorites(id) {
-        // console.log("id = "+id)
+    function CheckIsFavorites(id, nameDoc) {
 
-        let array = CreateArray();
+        console.log("here")
+        const response = bdd.readData(nameDoc)
+        response.then((data) => {
+            const newArrayFavoris = data
+            const index = newArrayFavoris.indexOf(id)
+            console.log(index)
+            if (index == -1) {
+                const item = document.getElementById(id.toString())
+                item.textContent = "🤍"
+                item.addEventListener("click",(obj)=>{
+                    item.textContent = "❤️"
+                })
+                item.removeEventListener("click",(obj)=>{
+                    item.textContent = "❤️"
 
-//        console.log(array); // affiche
+                })
+            } else {
+                const item = document.getElementById(id.toString())
+                item.textContent = "❤️"
+                item.addEventListener("click",(obj)=>{
+                    item.textContent = "🤍️"
+                })
+                item.removeEventListener("click",(obj)=>{
+                    item.textContent = "🤍️"
 
-        let index = array.indexOf(id.toString())
-        //      console.log("index = "+ index)
-        if (index != -1)
-            return true
-        else
-            return false
+                })
+
+            }
+
+            // alert()
+        })
+
+
     }
 
 
-    oldArray = CreateArray();
     if (load == false) {
         console.log("load  false")
 
@@ -128,7 +129,9 @@ function Cardacceuil() {
         })
     }
 
+
     for (let i = 0; i < 5; i++) {
+
 
         tab.push(<div
             className=" cursor-pointer flex flex-col  items-center
@@ -145,50 +148,49 @@ function Cardacceuil() {
                 </a>
                 {data && <p style={{fontSize: 10}} className=" text-black text-gray-400 truncate">{data[i].url}</p>}
 
-                <a id={"coeur"}
-                   className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white
+                {data && <a id={data[i].id.toString()}
+                            className="fav inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white
                      rounded-lg  cursor-pointer
                      focus:ring-4 focus:outline-none bg-gray-900
                       hover:bg-gray-600 ease-in duration-300 absolute bottom-0 mb-1 left-1/2 " onClick={() => {
-
-
-                    if (CheckIsFavorites(data[i].id)) {
-                        console.log("delete")
-                        oldArray.remove(100)
-                        DeleteFavorite(data[i].id)
-
-                    } else {
-                        console.log("add")
-                        oldArray.push(data[i].id)
-                        oldArray = oldArray.filter((item, index) => oldArray.indexOf(item) === index);
-                        Cookies.set('ArrayCookies', oldArray)
-
+                    for (let j = 0; j < 1; j++) {
+                        if (dataRedux[0].nom != null && data) {
+                            const userName = dataRedux[0].nom
+                           AddFavoris(data[i].id, userName)
+                        }
                     }
 
 
-                    //else
-                    //  Cookies.set('ArrayCookies',[...oldArray,...arrayCookies])
-
-                    console.log(Cookies.get('ArrayCookies'))
-
                 }}
-                >{data && CheckIsFavorites(data[i].id) ? "❤️" : "🤍"}
+                >{data && dataRedux[0].nom != null ? CheckIsFavorites(data[i].id, dataRedux[0].nom) : "err"}
 
 
-                </a>
+                </a>}
             </div>
         </div>)
+
     }
+    /*
+        if (data)
+            for (let i = 0; i < data.length; i++) {
+                if (data) Heart(data[i].id.toString())
+
+            }
+            /*
+     */
+    /*
+    for (let i = 0; i < data.length; i++) {
+        if (data) Heart(data[i].id)
+
+    }
+    */
 
     return (
 
         <div
             className={" w-full grid grid-cols-4 gap-4 mt-4 justify-items-center max-lg:grid-cols-3 max-sm:grid-cols-1"}>
-            {tab.map((data, index) => (
-                <div key={index}> {data}</div>
-            ))}
-        </div>
-    );
+            {tab.map((data, index) => (<div key={index}> {data}</div>))}
+        </div>);
 
 
 }

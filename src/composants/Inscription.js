@@ -1,5 +1,7 @@
 import {Link} from "react-router-dom";
 import FireBase from "../class/FireBase";
+import SecurityMail from "../services/SecurityMail";
+import SecurityPassword from "../services/SecurityPassword";
 
 function Inscription() {
     const bdd = new FireBase();
@@ -14,14 +16,15 @@ function Inscription() {
         const email = inputEmail.value;
 
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-        if (!emailRegex.test(email)) {
+        if (SecurityMail(email) == false) {
             alert("Email non valide");
             return;
         }
 
         const inputPassWord = document.getElementById("password");
         const password = inputPassWord.value;
-        if (password.length < 8) {
+
+        if (SecurityPassword(password) == false) {
             alert("Mot de passe trop court, minimun 8 caractères");
             return;
         }
@@ -44,6 +47,7 @@ function Inscription() {
     function handlePassword() {
 
     }
+
 
 
     return (

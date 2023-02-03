@@ -45,11 +45,11 @@ class FireBase extends Component {
             const userInfo = await getDoc(usersInfoRef);
             if (userInfo.exists) {
                 //console.log(userInfo.data())
-                const nameUser = userInfo.data().favoris;
+                const arrayFavoris = userInfo.data().favoris;
                 //console.log('nameuser = ');
                 //  console.log(nameUser);
 
-                this.state.fire = nameUser;
+                this.state.fire = arrayFavoris;
                 //console.log("state = " + this.state.fire)
                 return this.state.fire
 
@@ -61,10 +61,10 @@ class FireBase extends Component {
         }
     }
 
-    async UpdateFavoris() {
-        const favRef = doc(this.db, "Usersinfo", "clement70200@gmail.com")
+    async UpdateFavoris(arrayFavoris, documentName) {
+        const favRef = doc(this.db, "Usersinfo", documentName)
         await updateDoc(favRef, {
-            favoris: [112, 15, 1]
+            favoris: arrayFavoris
         })
     }
 

@@ -2,12 +2,30 @@ import GetUrl from "../class/Outils";
 import {useEffect, useState} from "react";
 import Cookies from "js-cookie";
 import './App.css';
+import FireBase from "../class/FireBase";
 
 
 
 
 function Personnage(){
     console.log(GetUrl())
+
+    const bdd = new FireBase()
+
+    const [load, setLoad] = useState(null);
+
+    useEffect(() => {
+        const connect = bdd.IsConnected()
+        connect.then((users) =>{
+            console.log("connect = "+ users)
+            if (users == false)
+                setLoad(false)
+            else
+                setLoad(users)
+        })
+
+    }, [])
+
 
 
     const [isClicked, setIsClicked] = useState(false);
@@ -54,7 +72,18 @@ function Personnage(){
         });
     });
 
+    if (load == false) {
+        console.log("load  false")
 
+        document.querySelectorAll("#coeur").forEach((items) => {
+            if (!items) {
+                return;
+            }
+
+            items.style.display = "none";
+
+        })
+    }
 
 
     for (let i = 0; i < 1; i++) {

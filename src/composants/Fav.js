@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import Cookies from "js-cookie";
 import {Link} from "react-router-dom";
 import FireBase from "../class/FireBase";
+import {useSelector} from "react-redux";
 
 function getRandomNumber() {
     return Math.floor(Math.random() * 826) + 1;
@@ -10,179 +11,116 @@ function getRandomNumber() {
 
 function Fav() {
 
-    const bdd = new FireBase()
-
-    const [load, setLoad] = useState(false);
-
-    useEffect(() => {
-        const connect = bdd.IsConnected()
-        connect.then((users) =>{
-            console.log("connect = "+ users)
-            if (users == false)
-                setLoad(false)
-            else
-                setLoad(users)
-        })
-
-    }, [])
-
+    const bdd = new FireBase();
+    const [load, setLoad] = useState(null);
     const [isClicked, setIsClicked] = useState(false);
-    var tab = new Array();
-    let arrayCookies = new Array();
-    let oldArray = new Array();
-    let verif = new Array();
-    verif = Cookies.get("ArrayCookies")
-    var fav = CreateArray();
-    let size = fav.length;
+    const [data, setData] = useState(null);
+    const [arrayFav, setArrayFav] = useState([]);
 
+    const dataRedux = useSelector((state) => state.login);
+    const userName = dataRedux[0].nom || null;
 
-    let [data, setData] = useState(null)
-
-    Array.prototype.remove = function (value) {
-        this.splice(this.indexOf(value), 1);
-    }
-    console.log("fav = " + fav)
-    // 3. Create out useEffect function
     useEffect(() => {
-        fetch("https://rickandmortyapi.com/api/character/" + fav[size - 1] + "," + fav[size - 2] + "," + fav[size - 3] + "," + fav[size - 4] + "," + fav[size - 5])
-            .then(response => response.json())
-            // 4. Setting *data* to the image url that we received from the response above
-            .then(data => setData(data))
-
-        console.log("data in fetch = " + data)
-
-
-    }, [])
-
-    function Heart() {
-        // Écoute le clic sur tous les éléments avec l'ID "coeur"
-        document.querySelectorAll("#coeur").forEach(function (heartElement) {
-            heartElement.addEventListener("click", (call) => {
-                // console.log(heartElement.textContent)
-                // Vérifie si le contenu de l'élément est "🤍"
-                if (heartElement.textContent === "🤍") {
-                    // Si oui, remplace le contenu par "❤️"
-                    heartElement.textContent = "❤️";
-                } else {
-                    // Sinon, remplace le contenu par "🤍"
-                    heartElement.textContent = "🤍";
-                }
-            });
-        });
-    }
-
-// Écoute le clic sur tous les éléments avec l'ID "coeur"
-    document.querySelectorAll("#coeur").forEach(function (heartElement) {
-        heartElement.addEventListener("click", (call) => {
-            // console.log(heartElement.textContent)
-            // Vérifie si le contenu de l'élément est "🤍"
-            if (heartElement.textContent === "🤍") {
-                // Si oui, remplace le contenu par "❤️"
-                heartElement.textContent = "❤️";
+        const connect = bdd.IsConnected();
+        connect.then((users) => {
+            console.log("connect = " + users);
+            if (users === false) {
+                setLoad(false);
             } else {
-                // Sinon, remplace le contenu par "🤍"
-                heartElement.textContent = "🤍";
+                setLoad(users);
             }
         });
-    });
+    }, []);
 
-    function CreateArray() {
-        // Supprimer le premier caractère (une virgule)
-        let chaine = verif.substring(1);
-        // Diviser la chaîne de caractères en un tableau en utilisant la virgule comme délimiteur
-        let array = chaine.split(",");
+    useEffect(() => {
+        if (!userName) return;
 
-        return array;
-    }
+        const response = bdd.readData(userName);
+        response.then((data) => {
+            console.log(data);
+            setArrayFav(data);
+        });
+    }, [userName]);
+
+    useEffect(() => {
+        if (!arrayFav.length) return;
+        const sizeArray = arrayFav.length
+        console.log(sizeArray)
+        fetch(
+            "https://rickandmortyapi.com/api/character/" + arrayFav[sizeArray - 1] + "," + arrayFav[sizeArray - 2] +
+            "," + arrayFav[sizeArray - 3] + "," + arrayFav[sizeArray - 4] + "," + arrayFav[sizeArray - 5]
+        )
+            .then((response) => response.json())
+            .then((data) => setData(data));
+    }, [arrayFav]);
 
     function CheckIsFavorites(id) {
-        //console.log("id = " + id)
+    }
 
-        let array = CreateArray();
+    function DeleteFavorite(id, nameDoc) {
+        const response = bdd.readData(nameDoc)
+        response.then((data) => {
+            const newArrayFavoris = data
+            const index = newArrayFavoris.indexOf(id)
+            if (index != -1){
+                //console.log(index)
+                 newArrayFavoris.splice(index, 1)
+                bdd.UpdateFavoris(newArrayFavoris, nameDoc)
 
-        //   console.log("array = "+array); // affiche
-
-        for (let i = 0; i < array.length; i++) {
-
-            if (id == array[i]) {
-                //console.log(true)
-                return true
             }
-        }
+
+
+            //bdd.UpdateFavoris(newArrayFavoris, nameDoc)
+        })
     }
 
-    function DeleteFavorite(id) {
-        let array = CreateArray();
-        array.shift();
-
-        const index = array.indexOf(id.toString());
-        array.splice(index, 1);
-        if (index != -1)
-            Cookies.set("ArrayCookies", array)
-    }
+    let tab = new Array()
+    for (let i = 0; i < 5; i++) {
 
 
-    oldArray = CreateArray();
-    //console.log("data = " + verif)
-    if (data != null && verif != "null" && size >= 5) {
-        for (let i = 0; i < 5; i++) {
-
-
-            tab.push(<div
-                className=" cursor-pointer flex flex-col  items-center
+        tab.push(<div
+            className=" cursor-pointer flex flex-col  items-center
                w-60 bg-white border border-gray-200 p-3 rounded-lg
                 shadow-lg hover:scale-105 ease-in duration-300 relative
                 " style={{height: 400}}>
-                <Link to={data && "/personnage?id=" + data[i].id}>
-                    {data && <img className=" hauto rounded mt-2" src={data[i].image} alt="image du perso"/>}
-                </Link>
-                <div className="p-5">
-                    <a href="src/composants/App#">
-                        {data &&
-                            <h5 className="mb-2 text-2xl font-bold tracking-tight text-black text-center">{data[i].name}</h5>}
-                    </a>
-                    {data && <p style={{fontSize: 10}} className=" text-black text-gray-400 truncate">{data[i].url}</p>}
+            <Link to={data && "/personnage?id=" + data[i].id}>
+                {data && <img className=" hauto rounded mt-2" src={data[i].image} alt="image du perso"/>}
+            </Link>
+            <div className="p-5">
+                <a href="src/composants/App#">
+                    {data &&
+                        <h5 className="mb-2 text-2xl font-bold tracking-tight text-black text-center">{data[i].name}</h5>}
+                </a>
+                {data && <p style={{fontSize: 10}} className=" text-black text-gray-400 truncate">{data[i].url}</p>}
 
-                    <a id={"coeur"}
-                       className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white
+                <a id={"coeur"}
+                   className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white
                      rounded-lg  cursor-pointer
                      focus:ring-4 focus:outline-none bg-gray-900
                       hover:bg-gray-600 ease-in duration-300 absolute bottom-0 mb-1 left-1/2"
 
-                       onClick={() => {
-
-                           if (CheckIsFavorites(data[i].id)) {
-                               Heart()
-                               console.log("delete")
-                               DeleteFavorite(data[i].id)
-                           } else {
-                               Heart()
-                               console.log("add")
-                               oldArray.push(data[i].id)
-                               oldArray = oldArray.filter((item, index) => oldArray.indexOf(item) === index);
-                               Cookies.set('ArrayCookies', oldArray)
+                   onClick={() => {
+                       for (let j = 0; j < 1; j++) {
+                           if (dataRedux[0].nom != null && data) {
+                               const userName = dataRedux[0].nom
+                               DeleteFavorite(data[i].id, userName)
                            }
+                       }
 
-                       }}
-                    >❤️
+                   }}
+                >❤️
 
 
-                    </a>
-                </div>
-            </div>)
-        }
-
-    } else {
-        tab.push(<div>Pas assez de favoris 5 mini pour aller sur cette page cliquer sur ce <a className={"font-bold"}
-                                                                                              href={"/"}>lien</a> pour
-            ajouter des favoris</div>)
+                </a>
+            </div>
+        </div>)
     }
 
 
     return load == false ? (
         <div>Connectez-vous sur ce <Link to={"/compte"} className={"font-bold"}>lien </Link>
             pour avoir assez
-        à vos favoris</div>
+            à vos favoris</div>
     ) : (
 
         <div

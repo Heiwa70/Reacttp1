@@ -13,8 +13,8 @@ function Gestion() {
     return (
         <section name="DataUserLogin">
         <div className="w-full h-96 flex justify-center align-middle mt-10 relative">
-            <div className=" w-52 h-64 bg-gray-200 rounded-xl">
-
+            <div className=" w-52 h-64 bg-gray-200 rounded-xl flex justify-center">
+                <h1 className="font-thin font-bold ">Page de déconnexion</h1>
             </div>
             <a href="/compte">
 
